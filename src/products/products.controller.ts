@@ -10,6 +10,11 @@ export class ProductsController {
         return this.productsService.getProducts(category)
     }
 
+    @Get('getProduct/:id')
+    getProduct(@Param('id') id:string){
+        return this.productsService.getProduct(id)
+    }
+
     @Get('getNewProducts')
     getNewProducts(){
         return this.productsService.getNewProducts()

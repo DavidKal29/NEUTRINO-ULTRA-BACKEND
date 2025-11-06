@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { conectarDB } from '../../src/database/mongo.js'
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class ProductsService {
@@ -17,6 +18,24 @@ export class ProductsService {
             console.log(error);
 
             return {error:'Error al obtener los productos'}
+            
+        }
+    }
+
+    async getProduct(id:string){
+        try {
+            const db = await conectarDB()
+            const products = db.collection('products')
+
+            const product = await products.findOne({_id: new ObjectId(id)})
+
+            console.log('El producto:',product);
+
+            return {product: product}
+        } catch (error) {
+            console.log(error);
+
+            return {error:'Error al obtener el producto'}
             
         }
     }
