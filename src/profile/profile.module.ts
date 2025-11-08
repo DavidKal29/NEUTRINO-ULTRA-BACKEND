@@ -12,7 +12,8 @@ export class ProfileModule implements NestModule  {
         consumer
             .apply(ProfileMiddleware)
             .forRoutes(
-                ProfileController
+                ProfileController,
+                {path:'auth/logout',method:RequestMethod.ALL}
             )
     }
 }

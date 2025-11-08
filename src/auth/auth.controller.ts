@@ -45,6 +45,12 @@ export class AuthController {
         
     }
 
+    @Get('logout')
+    logout(@Res() res:Response){
+        return this.authService.logout(res)
+    }
+
+
     
 
 }

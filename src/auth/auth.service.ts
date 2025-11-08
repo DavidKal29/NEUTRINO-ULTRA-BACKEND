@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { conectarDB } from '../../src/database/mongo.js';
+import { cookieOptions } from '../../src/cookieOptions/cookieOptions';
 import { hash,compare } from 'bcryptjs';
 import { RegisterDTO } from './dto/register.dto.js';
 import { LoginDTO } from './dto/login.dto.js';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +22,7 @@ export class AuthService {
 
             const encripted_password = await hash(dto.password, 10)
 
-            await users.insertOne({email:dto.email, name:dto.username, password:encripted_password})
+            await users.insertOne({email:dto.email, username:dto.username, password:encripted_password})
 
             console.log('Insertado con éxito');
 
@@ -61,6 +63,15 @@ export class AuthService {
 
             return {error:'Error al loguear usuario'} 
         }   
+    }
+
+    logout(res:Response){
+        try {
+            res.clearCookie('token',cookieOptions)
+            res.json({success:'Sesión Cerrada'})
+        } catch (error) {
+            res.json({error:'Error al cerrar sesión'})
+        }
     }
 
     
