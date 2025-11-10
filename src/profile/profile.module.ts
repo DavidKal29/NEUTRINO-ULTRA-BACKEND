@@ -2,6 +2,7 @@ import { Module, MiddlewareConsumer, NestModule, RequestMethod } from '@nestjs/c
 import { ProfileController } from './profile.controller';
 import { ProfileService } from './profile.service';
 import { ProfileMiddleware } from './profile.middleware';
+import { OrdersController } from 'src/orders/orders.controller';
 
 @Module({
     controllers: [ProfileController],
@@ -13,6 +14,7 @@ export class ProfileModule implements NestModule  {
             .apply(ProfileMiddleware)
             .forRoutes(
                 ProfileController,
+                OrdersController,
                 {path:'auth/logout',method:RequestMethod.ALL}
             )
     }
