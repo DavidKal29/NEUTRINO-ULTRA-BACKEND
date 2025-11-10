@@ -1,8 +1,9 @@
-import { IsString,IsEmail,MinLength,MaxLength, Matches, IsNotEmpty } from "class-validator";
-import { Transform } from "class-transformer";
+import { IsString, IsEmail, Matches,IsOptional,MinLength,MaxLength,Length,IsNotEmpty } from "class-validator";
+import { Transform } from 'class-transformer';
 import { escapeHtml } from "src/utils/escapeHtmls";
 
-export class LoginDTO{
+
+export class LoginDTO {
     @IsEmail({}, { message: 'Debes poner un email válido' })
     @MinLength(6, { message: 'Email demasiado corto' })
     @MaxLength(30, { message: 'Email demasiado largo' })
@@ -16,7 +17,7 @@ export class LoginDTO{
     @MaxLength(30, { message: 'La contraseña no puede superar los 30 caracteres' })
     @IsNotEmpty({ message: 'Ningún campo puede estar vacío' })
     @Transform(({ value }) => escapeHtml(value))
-        
+
     @Matches(/[a-z]/, {
         message: 'La contraseña debe contener al menos una letra minúscula',
     })
@@ -30,5 +31,6 @@ export class LoginDTO{
         message: 'La contraseña debe contener al menos un carácter especial',
     })
     password: string;
+
 
 }
