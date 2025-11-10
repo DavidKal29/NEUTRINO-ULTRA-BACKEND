@@ -15,7 +15,6 @@ function sanitizeInput(value?: string): string | undefined {
 
 
 export class RegisterDTO {
-    @IsOptional()
     @IsString({ message: 'El nombre debe ser texto' })
     @MinLength(2, { message: 'El nombre es demasiado corto' })
     @MaxLength(30, { message: 'El nombre es demasiado largo' })
@@ -23,7 +22,6 @@ export class RegisterDTO {
     @IsNotEmpty({ message: 'El nombre es obligatorio' })
     name?: string;
     
-    @IsOptional()
     @IsString({ message: 'El apellido debe ser texto' })
     @MinLength(2, { message: 'El apellido es demasiado corto' })
     @MaxLength(50, { message: 'El apellido es demasiado largo' })
