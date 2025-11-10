@@ -16,7 +16,7 @@ export class OrdersService {
 
             await users.updateOne({_id:new ObjectId(userID)},{$set:{name:dto.name, lastname:dto.lastname, dni:dto.dni, address:dto.address,phone:dto.phone}})
 
-            await orders.insertOne({id_user:new ObjectId(userID), products:dto.cart, address:dto.address,createdAt:new Date(), totalPrice:dto.totalPrice})
+            await orders.insertOne({id_user:new ObjectId(userID), products:dto.cart, address:dto.address,createdAt:new Date(), totalPrice:dto.totalPrice, metodoPago:dto.metodoPago})
 
             return {success:'Pedido creado con éxito'}
 

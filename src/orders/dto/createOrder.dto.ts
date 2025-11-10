@@ -60,4 +60,7 @@ export class CreateOrderDTO {
   @Type(()=>CartItemDTO)
   cart:CartItemDTO[];
 
+  @IsString()
+  metodoPago:string
+
 }

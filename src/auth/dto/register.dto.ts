@@ -5,7 +5,7 @@ import { escapeHtml } from "src/utils/escapeHtmls";
 //Función para super sanitizar los datos
 function sanitizeInput(value?: string): string | undefined {
   if (typeof value !== 'string'){
-    return undefined;
+    return '';
   } 
   
   const cleaned = value.replace(/\s+/g, ' ').trim();
@@ -20,6 +20,7 @@ export class RegisterDTO {
     @MinLength(2, { message: 'El nombre es demasiado corto' })
     @MaxLength(30, { message: 'El nombre es demasiado largo' })
     @Transform(({ value }) => sanitizeInput(value))
+    @IsNotEmpty({ message: 'El nombre es obligatorio' })
     name?: string;
     
     @IsOptional()
@@ -27,6 +28,7 @@ export class RegisterDTO {
     @MinLength(2, { message: 'El apellido es demasiado corto' })
     @MaxLength(50, { message: 'El apellido es demasiado largo' })
     @Transform(({ value }) => sanitizeInput(value))
+    @IsNotEmpty({ message: 'El apellido es obligatorio' })
     lastname?: string;
     
     @IsEmail({}, { message: 'Debes poner un email válido' })

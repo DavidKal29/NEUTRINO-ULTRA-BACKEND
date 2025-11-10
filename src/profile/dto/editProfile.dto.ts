@@ -15,18 +15,18 @@ function sanitizeInput(value?: string): string | undefined {
 
 export class EditProfileDTO {
 
-  @IsOptional()
   @IsString({ message: 'El nombre debe ser texto' })
   @MinLength(2, { message: 'El nombre es demasiado corto' })
   @MaxLength(30, { message: 'El nombre es demasiado largo' })
   @Transform(({ value }) => sanitizeInput(value))
+  @IsNotEmpty({ message: 'El nombre es obligatorio' })
   name?: string;
 
-  @IsOptional()
   @IsString({ message: 'El apellido debe ser texto' })
   @MinLength(2, { message: 'El apellido es demasiado corto' })
   @MaxLength(50, { message: 'El apellido es demasiado largo' })
   @Transform(({ value }) => sanitizeInput(value))
+  @IsNotEmpty({ message: 'El apellido es obligatorio' })
   lastname?: string;
 
   @IsEmail({}, { message: 'Debes poner un email válido' })
