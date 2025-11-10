@@ -17,7 +17,7 @@ export class OrdersService {
 
             await users.updateOne({_id:new ObjectId(userID)},{$set:{name:dto.name, lastname:dto.lastname, dni:dto.dni, address:dto.address,phone:dto.phone}})
 
-            await orders.insertOne({id_user:new ObjectId(userID), products:dto.cart, address:dto.address,createdAt:new Date(), totalPrice:dto.totalPrice, metodoPago:dto.metodoPago})
+            await orders.insertOne({id_user:new ObjectId(userID), products:dto.cart, address:dto.address,createdAt:new Date(), totalPrice:dto.totalPrice, metodoPago:dto.metodoPago, status:false})
 
             const cart = dto.cart
 
@@ -36,4 +36,31 @@ export class OrdersService {
             
         }
     }
+
+    async getMyOrders(req:Request){
+        try {
+            const db = await conectarDB()
+            const orders = db.collection('orders')
+
+            const userID = req.user?._id
+
+            const userOrders = await orders.find({id_user:new ObjectId(userID)},{projection:{products:0, address:0, metodoPago:0}}).toArray()
+
+            if (userOrders.length>0) {
+                return {success:'Pedidos obtenidos con éxito', orders:userOrders}
+            }else{
+                return {error:'Error al obtener tus pedidos, lo siento'}
+            }
+     
+
+        } catch (error) {
+            console.log(error);
+
+            return {error:'Error al crear el pedido, lo sentimos'}
+            
+            
+        }
+    }
+
+
 }
