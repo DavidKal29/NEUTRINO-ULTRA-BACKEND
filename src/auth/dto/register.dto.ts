@@ -19,6 +19,26 @@ export class RegisterDTO {
     @Transform(({ value }) => escapeHtml(value))
     username: string;
 
+    @IsOptional()
+    @IsString({ message: 'El nombre debe ser texto' })
+    @MinLength(2, { message: 'El nombre es demasiado corto' })
+    @MaxLength(30, { message: 'El nombre es demasiado largo' })
+    @Transform(({ value }) => {
+        const val = (value || '').trim();
+        return val === '' ? undefined : escapeHtml(val);
+    })
+    name?: string;
+
+    @IsOptional()
+    @IsString({ message: 'EL appellido debe ser un texto' })
+    @MinLength(2, { message: 'EL apellido es demasiado corto' })
+    @MaxLength(50, { message: 'EL apellido es demasiado largo' })
+    @Transform(({ value }) => {
+        const val = (value || '').trim();
+        return val === '' ? undefined : escapeHtml(val);
+    })
+    lastname?: string;
+
     @IsString({ message: 'La contraseña debe ser texto' })
     @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres' })
     @MaxLength(30, { message: 'La contraseña no puede superar los 30 caracteres' })

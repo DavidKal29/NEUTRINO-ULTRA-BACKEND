@@ -22,13 +22,13 @@ export class AuthService {
 
             const encripted_password = await hash(dto.password, 10)
 
-            await users.insertOne({email:dto.email, username:dto.username, password:encripted_password})
+            await users.insertOne({email:dto.email, username:dto.username, password:encripted_password, name:dto.name, lastname:dto.lastname})
 
             console.log('Insertado con éxito');
 
             const userData = await users.findOne({email:dto.email})
 
-            return {success:'Usuario insertado con éxito', userID:userData._id}
+            return {success:'Cuenta creada con éxito', userID:userData._id}
         } catch (error) {
             console.log('Error al insertar usuario');
 
