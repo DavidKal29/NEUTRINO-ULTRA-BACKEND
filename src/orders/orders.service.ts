@@ -44,7 +44,7 @@ export class OrdersService {
 
             const userID = req.user?._id
 
-            const userOrders = await orders.find({id_user:new ObjectId(userID)},{projection:{products:0, address:0, metodoPago:0}}).toArray()
+            const userOrders = await orders.find({id_user:new ObjectId(userID)}).toArray()
 
             if (userOrders.length>0) {
                 return {success:'Pedidos obtenidos con éxito', orders:userOrders}
@@ -56,8 +56,38 @@ export class OrdersService {
         } catch (error) {
             console.log(error);
 
-            return {error:'Error al crear el pedido, lo sentimos'}
+            return {error:'Error al obtener los pedidos, lo sentimos'}
             
+            
+        }
+    }
+
+    async getOrder(req:Request,id_order:string){
+        try {
+            const db = await conectarDB()
+            const orders = db.collection('orders')
+
+            const userID = req.user?._id
+
+            console.log(userID);
+            console.log(id_order);
+
+            const userOrder = await orders.findOne({id_user:new ObjectId(userID),_id:new ObjectId(id_order)})
+            
+            if (userOrder) {
+                console.log('Pedido obtenido');
+                
+                return {success:'Pedido obtenido con éxito', order:userOrder}
+            }else{
+                console.log('Pedido no obtenido');
+                
+                return {error:'El pedido que intentas obtener no es tuyo o no existe'}
+            }  
+
+        } catch (error) {
+            console.log(error);
+
+            return {error:'Error al obtener el pedido, lo sentimos'}    
             
         }
     }
