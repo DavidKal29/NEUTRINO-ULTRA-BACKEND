@@ -21,4 +21,9 @@ export class OrdersController {
     getOrder(@Req() req:Request, @Param('id_order') id_order:string){
         return this.ordersService.getOrder(req,id_order)
     }
+
+    @Get('deleteOrder/:id_order')
+    deleteOrder(@Req() req:Request, @Param('id_order') id_order:string){
+        return this.ordersService.deleteOrder(req,id_order)
+    }
 }

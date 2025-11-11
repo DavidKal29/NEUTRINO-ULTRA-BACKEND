@@ -92,5 +92,27 @@ export class OrdersService {
         }
     }
 
+    async deleteOrder(req:Request,id_order:string){
+        try {
+            const db = await conectarDB()
+            const orders = db.collection('orders')
+
+            const userID = req.user?._id
+
+            console.log(userID);
+            console.log(id_order);
+
+            await orders.deleteOne({id_user:new ObjectId(userID),_id:new ObjectId(id_order)})
+            
+            return {success:'Pedido eliminado con éxito'}
+
+        } catch (error) {
+            console.log(error);
+
+            return {error:'Error al eliminar el pedido, lo sentimos'}    
+            
+        }
+    }
+
 
 }
