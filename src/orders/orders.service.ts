@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import {conectarDB} from '../../src/database/mongo'
 import { ObjectId } from 'mongodb';
-import { Request } from 'express';
+import { Request,Response } from 'express';
 import { CreateOrderDTO } from './dto/createOrder.dto';
+import { OrderDTO } from './dto/order.dto';
+import PDFDocument from 'pdfkit';
+import 'pdfkit-table';
 
 @Injectable()
 export class OrdersService {
@@ -113,6 +116,73 @@ export class OrdersService {
             
         }
     }
+
+    
+    async getPDFOrder(res: Response, dto: OrderDTO) {
+        try {
+            const doc = new PDFDocument({ margin: 30 });
+
+            //Para que lo que se envíe sea un archivo pdf directamente
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', `attachment; filename=pedido_${dto?._id}.pdf`);
+
+            doc.pipe(res);
+
+            //Título
+            doc.fontSize(18).text('DETALLES DEL PEDIDO', { align: 'center' });
+            doc.moveDown();
+
+            //Información General
+            doc.fontSize(12);
+
+            doc.font('Helvetica-Bold').text('Número del pedido: ', { continued: true });
+            doc.font('Helvetica').text(`${dto._id}`);
+
+            doc.font('Helvetica-Bold').text('ID del usuario: ', { continued: true });
+            doc.font('Helvetica').text(`${dto.id_user}`);
+
+            doc.font('Helvetica-Bold').text('Fecha: ', { continued: true });
+            doc.font('Helvetica').text(`${new Date(dto.createdAt).toLocaleString()}`);
+
+            doc.font('Helvetica-Bold').text('Dirección: ', { continued: true });
+            doc.font('Helvetica').text(`${dto.address}`);
+
+            doc.font('Helvetica-Bold').text('Método de pago: ', { continued: true });
+            doc.font('Helvetica').text(`${dto.metodoPago}`);
+
+            doc.font('Helvetica-Bold').text('Estado: ', { continued: true });
+            doc.font('Helvetica').text(`${dto.status ? 'Entregado' : 'No Entregado'}`);
+
+            doc.moveDown();
+
+            //Datos de los Productos
+            doc.font('Helvetica-Bold').text('Productos:', { underline: true });
+            doc.moveDown(0.5);
+
+            dto.products.forEach((p, i) => {
+                doc.font('Helvetica-Bold').text(`${i + 1}. ${p.name}`);
+                doc.font('Helvetica').text(`   Precio Unitario: `, { continued: true }).text(`${p.price.toFixed(2)}€`);
+                doc.font('Helvetica').text(`   Cantidad: `, { continued: true }).text(`${p.quantity}`);
+                doc.font('Helvetica').text(`   Total: `, { continued: true }).text(`${p.totalPrice.toFixed(2)}€`);
+                doc.moveDown(0.5);
+            });
+
+            //Total de todo
+            doc.moveDown();
+            doc.fontSize(14).font('Helvetica-Bold').text('Total del pedido: ', { continued: true });
+            doc.font('Helvetica').text(`${dto.totalPrice.toFixed(2)}€`, { align: 'right' });
+
+            doc.end();
+
+        } catch (error) {
+            console.log(error);
+            if (!res.headersSent) {
+                res.json({ error: 'Error al generar el PDF de tu pedido' });
+            }
+        }
+    }
+
+
 
 
 }

@@ -1,7 +1,8 @@
-import { Controller, Post, Req, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Req, Body, Get, Param, Res } from '@nestjs/common';
 import { OrdersService } from './orders.service';
-import type { Request } from 'express';
+import type { Request,Response } from 'express';
 import { CreateOrderDTO } from './dto/createOrder.dto';
+import { OrderDTO } from './dto/order.dto';
 
 @Controller('orders')
 export class OrdersController {
@@ -25,5 +26,10 @@ export class OrdersController {
     @Get('deleteOrder/:id_order')
     deleteOrder(@Req() req:Request, @Param('id_order') id_order:string){
         return this.ordersService.deleteOrder(req,id_order)
+    }
+
+    @Post('getPDFOrder')
+    getPDFOrder(@Res() res:Response, @Body() dto:OrderDTO){
+        return this.ordersService.getPDFOrder(res,dto)
     }
 }
