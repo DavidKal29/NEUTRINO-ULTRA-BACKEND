@@ -22,7 +22,7 @@ export class AuthService {
 
             const encripted_password = await hash(dto.password, 10)
 
-            await users.insertOne({email:dto.email, username:dto.username, password:encripted_password, name:dto.name, lastname:dto.lastname})
+            await users.insertOne({email:dto.email, username:dto.username, password:encripted_password, name:dto.name, lastname:dto.lastname,rol:'client'})
 
             console.log('Insertado con éxito');
 

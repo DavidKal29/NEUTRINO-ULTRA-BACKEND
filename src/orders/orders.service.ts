@@ -49,11 +49,7 @@ export class OrdersService {
 
             const userOrders = await orders.find({id_user:new ObjectId(userID)}).toArray()
 
-            if (userOrders.length>0) {
-                return {success:'Pedidos obtenidos con éxito', orders:userOrders}
-            }else{
-                return {error:'Error al obtener tus pedidos, lo siento'}
-            }
+            return {success:'Pedidos obtenidos con éxito', orders:userOrders}
      
 
         } catch (error) {
