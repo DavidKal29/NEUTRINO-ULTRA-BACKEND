@@ -85,6 +85,34 @@ export class AdminService {
         }
     }
 
+    async changeProductActive(id_product:string, newActive:string){
+        try {
+            const db = await conectarDB()
+            const products = db.collection('products')
+            
+            const product = await products.findOne({_id:new ObjectId(id_product)})
+
+            if (!product) {
+                return {error:'Ese producto no existe'}
+            }
+
+            const results = await products.updateOne({_id:new ObjectId(id_product)},{$set:{active:newActive}})
+
+            if (results.modifiedCount === 0) {
+                return {error:'El producto ya tiene puesta esa configuración de actividad'}
+            }
+
+            return {success:'Configuración de actividad del producto cambiada'}
+     
+
+        } catch (error) {
+            console.log(error);
+
+            return {error:'Error al cambiar la actividad del producto, inténtelo de nuevo'}
+            
+        }
+    }
+
     async getPDFOrdersResume(res:Response, dto:OrderDTO[]) {
         try {
             const doc = new PDFDocument({ margin: 30 });

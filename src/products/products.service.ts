@@ -9,7 +9,7 @@ export class ProductsService {
             const db = await conectarDB()
             const products = db.collection('products')
 
-            const dataProducts = await products.find({category:category}).toArray()
+            const dataProducts = await products.find({category:category,active:{$ne:'dead'}}).toArray()
 
             return {products: dataProducts}
         } catch (error) {
@@ -25,7 +25,7 @@ export class ProductsService {
             const db = await conectarDB()
             const products = db.collection('products')
 
-            const product = await products.findOne({_id: new ObjectId(id)})
+            const product = await products.findOne({_id: new ObjectId(id),active:{$ne:'dead'}})
 
             return {product: product}
         } catch (error) {
@@ -41,7 +41,7 @@ export class ProductsService {
             const db = await conectarDB()
             const products = db.collection('products')
 
-            const dataProducts = await products.find().limit(10).toArray()
+            const dataProducts = await products.find({active:{$ne:'dead'}}).limit(10).toArray()
 
             return {products: dataProducts}
         } catch (error) {
@@ -57,7 +57,7 @@ export class ProductsService {
             const db = await conectarDB()
             const products = db.collection('products')
 
-            const dataProducts = await products.find().sort({sales:-1}).limit(10).toArray()
+            const dataProducts = await products.find({active:{$ne:'dead'}}).sort({sales:-1}).limit(10).toArray()
 
             return {products: dataProducts}
         } catch (error) {

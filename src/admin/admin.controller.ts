@@ -26,6 +26,11 @@ export class AdminController {
     changeOrderStatus(@Param('id_order') id_order:string, @Param('new_status') new_status:string){
         return this.adminService.changeOrderStatus(id_order,new_status)
     }
+    
+    @Get('changeProductActive/:id_product/:new_active')
+    changeProductActive(@Param('id_product') id_product:string, @Param('new_active') new_active:string){
+        return this.adminService.changeProductActive(id_product,new_active)
+    }
 
     @Post('getPDFOrdersResume')
     getPDFOrdersResume(@Res() res:Response, @Body() dto:OrderDTO[]){
