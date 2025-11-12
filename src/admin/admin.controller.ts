@@ -1,6 +1,7 @@
-import { Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Controller, Get, Param, Post, Req, Res, Body } from '@nestjs/common';
+import { OrderDTO } from 'src/orders/dto/order.dto';
 import { AdminService } from './admin.service';
-import type {Request} from 'express'
+import type {Request, Response} from 'express'
 
 @Controller('admin')
 export class AdminController {
@@ -24,5 +25,10 @@ export class AdminController {
     @Get('changeOrderStatus/:id_order/:new_status')
     changeOrderStatus(@Param('id_order') id_order:string, @Param('new_status') new_status:string){
         return this.adminService.changeOrderStatus(id_order,new_status)
+    }
+
+    @Post('getPDFOrdersResume')
+    getPDFOrdersResume(@Res() res:Response, @Body() dto:OrderDTO[]){
+        return this.adminService.getPDFOrdersResume(res,dto)
     }
 }

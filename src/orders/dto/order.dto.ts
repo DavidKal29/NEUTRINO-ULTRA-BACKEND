@@ -30,4 +30,7 @@ export class OrderDTO {
     @IsString()
     metodoPago:string
 
+    @IsString()
+    username:string
+
 }
