@@ -1,4 +1,4 @@
-import { Controller, Get, Req } from '@nestjs/common';
+import { Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import type {Request} from 'express'
 
@@ -19,5 +19,10 @@ export class AdminController {
     @Get('getAllOrders')
     getAllOrders(){
         return this.adminService.getAllOrders()
+    }
+
+    @Get('changeOrderStatus/:id_order/:new_status')
+    changeOrderStatus(@Param('id_order') id_order:string, @Param('new_status') new_status:string){
+        return this.adminService.changeOrderStatus(id_order,new_status)
     }
 }

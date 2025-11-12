@@ -20,7 +20,7 @@ export class OrdersService {
 
             await users.updateOne({_id:new ObjectId(userID)},{$set:{name:dto.name, lastname:dto.lastname, dni:dto.dni, address:dto.address,phone:dto.phone}})
 
-            await orders.insertOne({id_user:new ObjectId(userID), products:dto.cart, address:dto.address,createdAt:new Date(), totalPrice:dto.totalPrice, metodoPago:dto.metodoPago, status:false})
+            await orders.insertOne({id_user:new ObjectId(userID), products:dto.cart, address:dto.address,createdAt:new Date(), totalPrice:dto.totalPrice, metodoPago:dto.metodoPago, status:'No Entregado'})
 
             const cart = dto.cart
 
@@ -71,7 +71,12 @@ export class OrdersService {
             console.log(userID);
             console.log(id_order);
 
-            const userOrder = await orders.findOne({id_user:new ObjectId(userID),_id:new ObjectId(id_order)})
+            let userOrder;
+            if (req.user?.rol === 'admin') {
+                userOrder = await orders.findOne({_id:new ObjectId(id_order)})
+            }else{
+                userOrder = await orders.findOne({id_user:new ObjectId(userID),_id:new ObjectId(id_order)})
+            }
             
             if (userOrder) {
                 console.log('Pedido obtenido');
@@ -100,6 +105,18 @@ export class OrdersService {
 
             console.log(userID);
             console.log(id_order);
+
+            if (req?.user?.rol === 'admin') {
+                await orders.deleteOne({_id:new ObjectId(id_order)})
+            
+                return {success:'Pedido eliminado con éxito'}
+            }
+
+            const order = await orders.findOne({id_user:new ObjectId(userID)})
+
+            if (!order) {
+                return {error:'EL pedido no te pertenece o no existe'}
+            }
 
             await orders.deleteOne({id_user:new ObjectId(userID),_id:new ObjectId(id_order)})
             
@@ -147,7 +164,7 @@ export class OrdersService {
             doc.font('Helvetica').text(`${dto.metodoPago}`);
 
             doc.font('Helvetica-Bold').text('Estado: ', { continued: true });
-            doc.font('Helvetica').text(`${dto.status ? 'Entregado' : 'No Entregado'}`);
+            doc.font('Helvetica').text(`${dto.status}`);
 
             doc.moveDown();
 

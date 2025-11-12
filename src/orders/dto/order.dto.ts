@@ -13,8 +13,8 @@ export class OrderDTO {
     @IsString()
     address:string
 
-    @IsBoolean()
-    status:boolean
+    @IsString()
+    status:string
 
     @IsString()
     createdAt:string
