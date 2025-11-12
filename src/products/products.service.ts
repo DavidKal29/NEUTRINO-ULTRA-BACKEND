@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class ProductsService {
-    async getProducts(category:String){
+    async getProducts(category:string){
         try {
             const db = await conectarDB()
             const products = db.collection('products')
@@ -58,6 +58,22 @@ export class ProductsService {
             const products = db.collection('products')
 
             const dataProducts = await products.find().sort({sales:-1}).limit(10).toArray()
+
+            return {products: dataProducts}
+        } catch (error) {
+            console.log(error);
+
+            return {error:'Error al obtener los productos'}
+            
+        }
+    }
+
+    async getAllProducts(){
+        try {
+            const db = await conectarDB()
+            const products = db.collection('products')
+
+            const dataProducts = await products.find({}).toArray()
 
             return {products: dataProducts}
         } catch (error) {

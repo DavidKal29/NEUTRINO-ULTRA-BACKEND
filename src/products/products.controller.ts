@@ -25,4 +25,9 @@ export class ProductsController {
         return this.productsService.getMostPopularProducts()
     }
 
+    @Get('getAllProducts')
+    getAllProducts(){
+        return this.productsService.getAllProducts()
+    }
+
 }
