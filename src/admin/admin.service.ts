@@ -40,8 +40,10 @@ export class AdminService {
                 }
             ]).toArray();
 
+            const sortedOrders = [...Orders].reverse()
 
-            return {success:'Pedidos obtenidos con éxito', orders:Orders}
+
+            return {success:'Pedidos obtenidos con éxito', orders:sortedOrders}
      
 
         } catch (error) {

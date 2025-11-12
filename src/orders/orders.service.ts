@@ -49,7 +49,9 @@ export class OrdersService {
 
             const userOrders = await orders.find({id_user:new ObjectId(userID)}).toArray()
 
-            return {success:'Pedidos obtenidos con éxito', orders:userOrders}
+            const sortedOrders = [...userOrders].reverse()
+
+            return {success:'Pedidos obtenidos con éxito', orders:sortedOrders}
      
 
         } catch (error) {
