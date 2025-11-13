@@ -120,7 +120,7 @@ export class AdminService {
     
             //Para que lo que se envíe sea un archivo pdf directamente
             res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader('Content-Disposition', `attachment; filename=resumen_pedidos_${new Date().toLocaleDateString("es-ES")}.pdf`);
+            res.setHeader('Content-Disposition', `attachment; filename=detalles_pedidos_${new Date().toLocaleDateString("es-ES")}.pdf`);
     
             doc.pipe(res);
     
@@ -148,8 +148,6 @@ export class AdminService {
 
             });
 
-            
-    
             //Ganancias totales
             doc.moveDown();
             doc.fontSize(14).font('Helvetica-Bold').text('GANANCIAS TOTALES: ', { continued: true });

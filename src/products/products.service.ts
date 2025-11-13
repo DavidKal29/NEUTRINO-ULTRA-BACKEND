@@ -73,7 +73,7 @@ export class ProductsService {
             const db = await conectarDB()
             const products = db.collection('products')
 
-            const dataProducts = await products.find({}).toArray()
+            const dataProducts = await products.find({}).sort({sales:-1}).toArray()
 
             return {products: dataProducts}
         } catch (error) {
