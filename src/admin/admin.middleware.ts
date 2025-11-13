@@ -30,7 +30,7 @@ export class AdminMiddleware implements NestMiddleware {
 
       const userData = await users.findOne({_id:new ObjectId(userID)},{projection:{password:0}})
 
-      if (userData.rol != 'admin') {
+      if (!userData?.rol.includes('admin')) {
         return res.status(401).json({error:'No eres administrador, no puedes visitar esta ruta'})
       }
 
@@ -40,6 +40,8 @@ export class AdminMiddleware implements NestMiddleware {
       
 
     } catch (error) {
+      console.log(error);
+      
       console.log('Error de verificación de token');
       
       return res.status(401).json({error:'Error de autenticación'})

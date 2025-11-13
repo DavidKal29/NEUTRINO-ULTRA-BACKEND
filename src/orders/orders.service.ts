@@ -74,7 +74,7 @@ export class OrdersService {
             console.log(id_order);
 
             let userOrder;
-            if (req.user?.rol === 'admin') {
+            if (req.user?.rol.includes('admin')) {
                 userOrder = await orders.findOne({_id:new ObjectId(id_order)})
             }else{
                 userOrder = await orders.findOne({id_user:new ObjectId(userID),_id:new ObjectId(id_order)})
@@ -108,7 +108,7 @@ export class OrdersService {
             console.log(userID);
             console.log(id_order);
 
-            if (req?.user?.rol === 'admin') {
+            if (req.user?.rol.includes('admin')) {
                 await orders.deleteOne({_id:new ObjectId(id_order)})
             
                 return {success:'Pedido eliminado con éxito'}
