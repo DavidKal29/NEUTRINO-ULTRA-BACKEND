@@ -83,4 +83,20 @@ export class ProductsService {
             
         }
     }
+
+    async getAllProductData(id:string){
+        try {
+            const db = await conectarDB()
+            const products = db.collection('products')
+
+            const product = await products.findOne({_id: new ObjectId(id)})
+
+            return {product: product}
+        } catch (error) {
+            console.log(error);
+
+            return {error:'Error al obtener el producto'}
+            
+        }
+    }
 }

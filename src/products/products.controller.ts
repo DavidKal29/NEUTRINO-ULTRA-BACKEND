@@ -30,4 +30,9 @@ export class ProductsController {
         return this.productsService.getAllProducts()
     }
 
+    @Get('getAllProductData/:id')
+    getAllProductData(@Param('id') id:string){
+        return this.productsService.getAllProductData(id)
+    }
+
 }
