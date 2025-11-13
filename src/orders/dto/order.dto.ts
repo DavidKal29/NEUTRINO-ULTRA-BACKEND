@@ -1,4 +1,4 @@
-import { IsString,IsArray, ValidateNested, IsNumber, IsBoolean } from "class-validator";
+import { IsString,IsArray, ValidateNested, IsNumber, IsBoolean, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
 import { CartItemDTO } from "./cartItem.dto";
 
@@ -30,6 +30,7 @@ export class OrderDTO {
     @IsString()
     metodoPago:string
 
+    @IsOptional()
     @IsString()
     username:string
 
