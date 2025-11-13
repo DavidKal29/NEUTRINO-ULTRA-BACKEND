@@ -2,6 +2,7 @@ import { Controller, Get, Param, Post, Req, Res, Body } from '@nestjs/common';
 import { OrderDTO } from 'src/orders/dto/order.dto';
 import { AdminService } from './admin.service';
 import type {Request, Response} from 'express'
+import { ProductDTO } from 'src/products/dto/product.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -36,4 +37,12 @@ export class AdminController {
     getPDFOrdersResume(@Res() res:Response, @Body() dto:OrderDTO[]){
         return this.adminService.getPDFOrdersResume(res,dto)
     }
+
+    @Post('editProduct')
+    editProduct(@Body() dto:ProductDTO){
+        return this.adminService.editProduct(dto)
+    }
+
+
+    
 }

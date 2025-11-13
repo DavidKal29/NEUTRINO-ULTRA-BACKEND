@@ -5,6 +5,7 @@ import { ObjectId } from 'mongodb';
 import PDFDocument from 'pdfkit';
 import { OrderDTO } from 'src/orders/dto/order.dto';
 import 'pdfkit-table';
+import { ProductDTO } from 'src/products/dto/product.dto';
 
 @Injectable()
 export class AdminService {
@@ -163,4 +164,52 @@ export class AdminService {
             }
         }
     }
+
+    async editProduct(dto:ProductDTO){
+            try {
+                const db = await conectarDB()
+                const products = db.collection('products')
+    
+                const productID = dto._id
+    
+                const product_exists = await products.findOne({_id:new ObjectId(productID)})
+                
+                if (product_exists) {
+                    
+                    const results = await products.updateOne(
+                        {_id:new ObjectId(productID)},
+                        {$set:{
+                            name:dto.name,
+                            description:dto.description,
+                            price:dto.price,
+                            stock:dto.stock,
+                            category:dto.category,
+                            brand:dto.brand,
+                        }},
+                        {upsert:true}
+                    )
+    
+                    if (results.modifiedCount === 0) {
+                        return {error:'Asegurate de que al menos un campo sea distinto'}
+                    }
+    
+                    console.log('Datos cambiados');
+                    
+    
+                    return {success:'Datos cambiados con éxito'}
+                    
+                }else{
+                    console.log('El producto no ha sido encontrado');
+                    
+                    return {error:'El producto no ha sido encontrado'}
+                }
+    
+    
+            } catch (error) {
+                console.log(error);
+    
+                return {error:'Error al editar los datos del producto'}
+                
+            }
+        }
 }
