@@ -257,6 +257,7 @@ export class AdminService {
 
             const db = await conectarDB()
             const users = db.collection('users')
+            const orders = db.collection('orders')
 
             console.log(id_user);
             
@@ -265,7 +266,11 @@ export class AdminService {
             if (!user) {
                 return {error:'El usuario no existe'}
             }
-    
+
+            await orders.deleteMany({id_user:new ObjectId(id_user)})
+
+            console.log('Pedidos del usuario eliminados');
+            
             await users.deleteOne({_id:new ObjectId(id_user)})
             
             return {success:'Usuario eliminado con éxito'}
