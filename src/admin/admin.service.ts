@@ -209,5 +209,35 @@ export class AdminService {
                 return {error:'Error al editar los datos del producto'}
                 
             }
+    }
+
+    async getAllUsers(req:Request){
+        try {
+
+            if (req?.user?.rol != 'superadmin') {
+                return {error:'Debes ser super-administrador para poder acceder a este panel'}
+            }
+
+            const db = await conectarDB()
+            const users = db.collection('users')
+
+            const userID = req?.user?._id
+
+            const Users = await users.find({_id:{$ne:new ObjectId(userID)}},{projection:{password:0}}).toArray() 
+
+            if (Users.length>0) {
+                console.log('Usuarios obtenidos con éxito');
+                
+                return {success:'Usuarios obtenidos con éxito', users:Users}
+            }else{
+                return {error:'No se han encontrado los usuarios de la web'}
+            }
+        
+        } catch (error) {
+            console.log(error);
+
+            return {error:'Error al obtener los usuarios, lo sentimos'}
+            
         }
+    }
 }

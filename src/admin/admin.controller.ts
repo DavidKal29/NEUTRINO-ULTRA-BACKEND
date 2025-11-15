@@ -43,6 +43,9 @@ export class AdminController {
         return this.adminService.editProduct(dto)
     }
 
-
+    @Get('getAllUsers')
+    getAllUsers(@Req() req:Request){
+        return this.adminService.getAllUsers(req)
+    }
     
 }
