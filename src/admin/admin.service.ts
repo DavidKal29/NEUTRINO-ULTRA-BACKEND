@@ -240,4 +240,35 @@ export class AdminService {
             
         }
     }
+
+    async deleteUser(req:Request,id_user:string){
+        try {
+
+            if (req?.user?.rol != 'superadmin') {
+                return {error:'Debes ser super-administrador para poder acceder a este panel'}
+            }
+            
+            const db = await conectarDB()
+            const users = db.collection('users')
+
+            console.log(id_user);
+            
+            const user = await users.findOne({_id:new ObjectId(id_user)})
+
+            if (!user) {
+                return {error:'El usuario no existe'}
+            }
+    
+            await users.deleteOne({_id:new ObjectId(id_user)})
+            
+            return {success:'Usuario eliminado con éxito'}
+
+        } catch (error) {
+            console.log(error);
+
+            return {error:'Error al eliminar el usuario, lo sentimos'}    
+            
+        }
+    }
+
 }

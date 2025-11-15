@@ -47,5 +47,10 @@ export class AdminController {
     getAllUsers(@Req() req:Request){
         return this.adminService.getAllUsers(req)
     }
+
+    @Get('deleteUser/:id_user')
+    deleteUser(@Req() req:Request, @Param('id_user') id_user:string){
+        return this.adminService.deleteUser(req, id_user)
+    }
     
 }
