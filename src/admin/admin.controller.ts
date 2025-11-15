@@ -3,6 +3,7 @@ import { OrderDTO } from 'src/orders/dto/order.dto';
 import { AdminService } from './admin.service';
 import type {Request, Response} from 'express'
 import { ProductDTO } from 'src/products/dto/product.dto';
+import { CreateUserDTO } from './dto/createUser.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -51,6 +52,11 @@ export class AdminController {
     @Get('deleteUser/:id_user')
     deleteUser(@Req() req:Request, @Param('id_user') id_user:string){
         return this.adminService.deleteUser(req, id_user)
+    }
+
+    @Post('createUser')
+    createUser(@Req() req:Request, @Body() dto:CreateUserDTO){
+        return this.adminService.createUser(req,dto)
     }
     
 }

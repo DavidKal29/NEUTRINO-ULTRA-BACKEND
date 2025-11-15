@@ -6,6 +6,8 @@ import PDFDocument from 'pdfkit';
 import { OrderDTO } from 'src/orders/dto/order.dto';
 import 'pdfkit-table';
 import { ProductDTO } from 'src/products/dto/product.dto';
+import { CreateUserDTO } from './dto/createUser.dto';
+import { hash } from 'bcryptjs';
 
 @Injectable()
 export class AdminService {
@@ -227,9 +229,13 @@ export class AdminService {
 
             if (Users.length>0) {
                 console.log('Usuarios obtenidos con éxito');
+                console.log(Users);
+                
                 
                 return {success:'Usuarios obtenidos con éxito', users:Users}
             }else{
+                console.log('Usuarios no obtenidos');
+                
                 return {error:'No se han encontrado los usuarios de la web'}
             }
         
@@ -247,7 +253,7 @@ export class AdminService {
             if (req?.user?.rol != 'superadmin') {
                 return {error:'Debes ser super-administrador para poder acceder a este panel'}
             }
-            
+
             const db = await conectarDB()
             const users = db.collection('users')
 
@@ -268,6 +274,48 @@ export class AdminService {
 
             return {error:'Error al eliminar el usuario, lo sentimos'}    
             
+        }
+    }
+
+    async createUser(req:Request,dto:CreateUserDTO){
+        try {
+            
+            if (req?.user?.rol != 'superadmin') {
+                return {error:'Debes ser super-administrador para poder acceder a este panel'}
+            }
+
+            const db = await conectarDB()
+            const users = db.collection('users')
+        
+            const user_exists = await users.findOne({email:dto.email})
+        
+            if (user_exists) {
+                return {error:'Email o Username ya están en uso por otro usuario'}
+            }
+        
+            const encripted_password = await hash(dto.password, 10)
+        
+            await users.insertOne(
+                {
+                    email:dto.email, 
+                    username:dto.username, 
+                    password:encripted_password, 
+                    name:dto.name, 
+                    lastname:dto.lastname,
+                    rol:dto.rol,
+                    dni:dto.dni,
+                    phone:dto.phone,
+                    address:dto.address
+                }
+            )
+        
+            console.log('Insertado con éxito');
+        
+            return {success:'Cuenta creada con éxito'}
+        } catch (error) {
+            console.log('Error al insertar usuario');
+        
+            return {error:'Error al insertar usuario'} 
         }
     }
 
