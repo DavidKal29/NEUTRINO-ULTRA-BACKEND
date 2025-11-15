@@ -4,6 +4,7 @@ import { AdminService } from './admin.service';
 import type {Request, Response} from 'express'
 import { ProductDTO } from 'src/products/dto/product.dto';
 import { CreateUserDTO } from './dto/createUser.dto';
+import { EditUserDTO } from './dto/editUser.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -57,6 +58,16 @@ export class AdminController {
     @Post('createUser')
     createUser(@Req() req:Request, @Body() dto:CreateUserDTO){
         return this.adminService.createUser(req,dto)
+    }
+
+    @Get('getUser/:id_user')
+    getUser(@Req() req:Request, @Param('id_user') id_user:string){
+        return this.adminService.getUser(req, id_user)
+    }
+
+    @Post('editUser/:id_user')
+    editUser(@Req() req:Request, @Body() dto:EditUserDTO){
+        return this.adminService.editUser(req,dto)
     }
     
 }

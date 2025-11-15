@@ -7,6 +7,7 @@ import { OrderDTO } from 'src/orders/dto/order.dto';
 import 'pdfkit-table';
 import { ProductDTO } from 'src/products/dto/product.dto';
 import { CreateUserDTO } from './dto/createUser.dto';
+import { EditUserDTO } from './dto/editUser.dto';
 import { hash } from 'bcryptjs';
 
 @Injectable()
@@ -316,6 +317,97 @@ export class AdminService {
             console.log('Error al insertar usuario');
         
             return {error:'Error al insertar usuario'} 
+        }
+    }
+
+    async getUser(req:Request, id_user:string){
+        try {
+            
+            if (req?.user?.rol != 'superadmin') {
+                return {error:'Debes ser super-administrador para poder acceder a este panel'}
+            }
+
+            const db = await conectarDB()
+            const users = db.collection('users')
+        
+            const user_exists = await users.findOne({_id:new ObjectId(id_user)},{projection:{password:0}})
+        
+            if (user_exists) {
+                return {success:'Usuario encontrado',user:user_exists}
+            }else{
+                return {error:'No se ha podido obtener ese usuario'}
+            }  
+            
+        } catch (error) {
+            console.log('Error al encontrar al usuario');
+        
+            return {error:'Error al encontrar al usuario'} 
+        }
+    }
+
+    async editUser(req:Request,dto:EditUserDTO){
+        try {
+
+            if (req?.user?.rol != 'superadmin') {
+                return {error:'Debes ser super-administrador para poder acceder a este panel'}
+            }
+
+            const db = await conectarDB()
+            const users = db.collection('users')
+    
+            console.log('Entramos a la ruta');
+    
+            const user_exists = await users.findOne({_id:new ObjectId(dto._id)})
+    
+            console.log('User exists definido');
+    
+            if (user_exists) {
+    
+                console.log('Usuario existe');
+
+                const user_existent = await users.findOne({_id:{$ne:new ObjectId(dto._id)},$or:[{email:dto.email}, {username:dto.username}]})
+
+                if (user_existent) {
+                    return {error:'Email o Username ya están en uso por otro usuario'}
+                }
+                    
+                const results = await users.updateOne(
+                    {_id:new ObjectId(dto._id)},
+                    {$set:{
+                        email:dto.email,
+                        username:dto.username,
+                        name:dto.name,
+                        lastname:dto.lastname,
+                        address:dto.address,
+                        phone:dto.phone,
+                        dni:dto.dni,
+                        rol:dto.rol
+                    }},
+                    {upsert:true}
+                )
+    
+                if (results.modifiedCount === 0) {
+                    console.log('Asegurate de que al menos un campo sea disitinto');
+                        
+                    return {error:'Asegurate de que al menos un campo sea distinto'}
+                }
+    
+                console.log('Datos cambiado');
+                    
+                return {success:'Datos cambiados con éxito'}
+                    
+            }else{
+                console.log('El usuario no ha sido encontrado');
+                    
+                return {error:'El usuario no ha sido encontrado'}
+            }
+    
+    
+        } catch (error) {
+            console.log(error);
+    
+            return {error:'Error al editar los datos del perfil'}
+                
         }
     }
 

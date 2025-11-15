@@ -14,7 +14,7 @@ export class AuthService {
             const db = await conectarDB()
             const users = db.collection('users')
 
-            const user_exists = await users.findOne({email:dto.email})
+            const user_exists = await users.findOne({$or:[{email:dto.email}, {username:dto.username}]})
 
             if (user_exists) {
                 return {error:'Email o Username ya están en uso por otro usuario'}

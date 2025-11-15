@@ -26,6 +26,11 @@ export class ProfileService {
             
 
             if (user_exists) {
+                const user_existent = await users.findOne({_id:{$ne:new ObjectId(userID)},$or:[{email:dto.email}, {username:dto.username}]})
+                
+                if (user_existent) {
+                    return {error:'Email o Username ya están en uso por otro usuario'}
+                }
 
                 console.log('Usuario existe');
                 
