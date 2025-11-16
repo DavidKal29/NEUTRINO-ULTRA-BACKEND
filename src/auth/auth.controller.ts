@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res, Get } from '@nestjs/common';
+import { Body, Controller, Post, Res, Get, Param } from '@nestjs/common';
 import { RegisterDTO } from './dto/register.dto';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
@@ -6,6 +6,8 @@ import type { Response } from 'express';
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { cookieOptions } from '../../src/cookieOptions/cookieOptions.js';
+import { RecuperationEmailDTO } from './dto/recuperationEmail.dto';
+import { ChangePasswordDTO } from './dto/changePassword.dto';
 
 dotenv.config()
 
@@ -50,8 +52,17 @@ export class AuthController {
         return this.authService.logout(res)
     }
 
+    @Post('forgotPassword')
+    forgotPassword(@Body() dto:RecuperationEmailDTO){
+        return this.authService.forgotPassword(dto)
+    }
 
-    
+    @Post('changePassword/:token')
+    changePassword(@Body() dto:ChangePasswordDTO, @Param('token') token:string){
+        return this.authService.changePassword(dto,token)
+    }
+
+
 
 }
 
