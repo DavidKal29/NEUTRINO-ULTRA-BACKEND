@@ -241,9 +241,10 @@ export class AdminService {
             if (Users.length>0) {
                 console.log('Usuarios obtenidos con éxito');
                 console.log(Users);
+
+                const sortedUsers = [...Users].reverse()
                 
-                
-                return {success:'Usuarios obtenidos con éxito', users:Users}
+                return {success:'Usuarios obtenidos con éxito', users:sortedUsers}
             }else{
                 console.log('Usuarios no obtenidos');
                 
