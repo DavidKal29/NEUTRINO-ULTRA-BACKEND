@@ -25,8 +25,13 @@ export class OrdersService {
             const cart = dto.cart
 
             for (let i = 0; i < cart.length; i++) {
-                await products.updateOne({_id:new ObjectId(cart[i]._id)},{$inc:{sales:cart[i].quantity}})
-                
+                await products.updateOne(
+                    {_id:new ObjectId(cart[i]._id)},
+                    {$inc:{
+                        sales:cart[i].quantity,
+                        stock:-(cart[i].quantity)
+                    }}
+                ) 
             }
 
             return {success:'Pedido creado con éxito'}
