@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from'cookie-parser'
 import dotenv from 'dotenv'
+import csurf from 'csurf';
 dotenv.config()
 
 async function bootstrap() {
@@ -15,6 +16,12 @@ async function bootstrap() {
   )
 
   app.use(cookieParser())
+
+  app.use(
+    csurf({
+      cookie: true, 
+    })
+  );
 
   app.enableCors({
     origin:process.env.FRONTEND_URL,

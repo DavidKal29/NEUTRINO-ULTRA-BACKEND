@@ -1,8 +1,8 @@
-import { Body, Controller, Post, Res, Get, Param } from '@nestjs/common';
+import { Body, Controller, Post, Res, Get, Param,Req } from '@nestjs/common';
 import { RegisterDTO } from './dto/register.dto';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
-import type { Response } from 'express';
+import type { Response, Request } from 'express';
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { cookieOptions } from '../../src/cookieOptions/cookieOptions.js';
@@ -60,6 +60,11 @@ export class AuthController {
     @Post('changePassword/:token')
     changePassword(@Body() dto:ChangePasswordDTO, @Param('token') token:string){
         return this.authService.changePassword(dto,token)
+    }
+
+    @Get('csrf-token')
+    getCsrfToken(@Req() req:Request) {
+        return { csrfToken: req.csrfToken() };
     }
 
 
