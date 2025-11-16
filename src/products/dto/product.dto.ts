@@ -54,6 +54,16 @@ export class ProductDTO {
     @IsNotEmpty({ message: "El stock es obligatorio" })
     stock?: number;
 
+    @Transform(({ value }) => {
+        const num = parseInt(value, 10);
+        return isNaN(num) ? undefined : num;
+    })
+    @IsInt({ message: "El descuento debe ser un número entero" })
+    @Min(0, { message: "El descuento no puede ser negativo" })
+    @Max(100, { message: "El descuento no puede superar el 100%" })
+    @IsNotEmpty({ message: "El descuento es obligatorio" })
+    discount?: number;
+
 
     @IsString()
     category:string

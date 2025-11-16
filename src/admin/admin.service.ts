@@ -176,13 +176,23 @@ export class AdminService {
                 const product_exists = await products.findOne({_id:new ObjectId(productID)})
                 
                 if (product_exists) {
+
+                    const {price,discount} = dto
+
+                    //Si son undefined, ambos 0
+                    const Price = price ?? 0
+                    const Discount = discount ?? 0
+
+                    const newPrice = Price * (1 - (Discount/100))
                     
                     const results = await products.updateOne(
                         {_id:new ObjectId(productID)},
                         {$set:{
                             name:dto.name,
                             description:dto.description,
-                            price:dto.price,
+                            oldPrice:dto.price,
+                            discount:dto.discount,
+                            price:newPrice,
                             stock:dto.stock,
                             category:dto.category,
                             brand:dto.brand,
