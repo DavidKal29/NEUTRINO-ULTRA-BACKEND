@@ -62,12 +62,5 @@ export class AuthController {
         return this.authService.changePassword(dto,token)
     }
 
-    @Get('csrf-token')
-    getCsrfToken(@Req() req:Request) {
-        return { csrfToken: req.csrfToken() };
-    }
-
-
-
 }
 
