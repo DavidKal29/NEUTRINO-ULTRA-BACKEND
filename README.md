@@ -21,6 +21,103 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+
+
+# Neutrino-Ultra
+
+Esta es una **API/backend** para una **tienda online de tecnología** llamada **Neutrino-Ultra**, diseñada para ofrecer funcionalidades completas de **autenticación, gestión de usuarios, productos, pedidos y administración**, siendo **robusta, segura y escalable**.
+
+⚠️ **Dependencia:** Esta aplicación está construida para ser consumida por el frontend de **Neutrino-Ultra**.
+
+---
+
+### Funcionalidades para la API:
+
+- **Autenticación completa**:
+  - Registro, login y recuperación de contraseña mediante **JWT**.
+- **Gestión de usuarios**:
+  - Crear, editar y eliminar usuarios.
+  - Visualización de perfil.
+  - Asignación de roles (**CLIENT**, **ADMIN**, **SUPER_ADMIN**).
+- **Gestión de productos**:
+  - Móviles, ordenadores, tablets y portátiles.
+  - Editar, gestionar y eliminar productos.
+  - Modificación de:
+    - Precio.
+    - Stock disponible.
+    - Porcentaje de descuento.
+    - Datos del producto (nombre, descripción,etc.)
+    - Estado del producto (activo / dado de baja).
+- **Gestión de pedidos**:
+  - Crear pedidos.
+  - Visualización del historial de pedidos por usuario.
+  - Cambio de estado de pedidos:
+    - No Entregado.
+    - En reparto.
+    - Entregado.
+  - Eliminación de pedidos.
+- **Control de stock**:
+  - Validación automática para evitar compras que superen el stock disponible.
+- **Generación de PDFs**:
+  - PDF con el detalle de un pedido (usuario).
+  - PDF con todos los pedidos y ganancias totales (admin / super admin).
+- **Roles y permisos**:
+  - **Admin**:
+    - Gestión de productos.
+    - Visualización y modificación del estado de pedidos.
+    - Descarga de PDF con pedidos y ganancias.
+  - **Super Admin**:
+    - Todas las funciones de Admin.
+    - Gestión completa de usuarios.
+    - Visualización de pedidos de cualquier usuario.
+- **Protección de rutas** mediante **JWT** y **Cookies**.
+- **Middleware de seguridad**:
+  - Manejo de cookies y validación de JWT.
+  - Acceso restringido a rutas según rol.
+- **Validación de datos** usando `class-validator` y `class-transformer`.
+- **CORS habilitado**, preparado para trabajar con frontend externo.
+- **Envío de emails automáticos**:
+  - Recuperación de contraseña.
+  - Notificaciones del sistema.
+  - Usando el servicio de **Brevo** (`@getbrevo/brevo`).
+
+---
+
+### Variables de entorno
+
+Crea un archivo `.env` en la raíz del proyecto y añade tus propios datos:
+
+```bash
+MONGO_URI=
+FRONTEND_URL=
+JWT_SECRET=
+APIKEY=  (Asegúrate de tener cuenta en Brevo y una API Key válida)
+CORREO=
+PORT=
+```
+
+### Requisitos
+
+Para ejecutar este proyecto necesitas:
+
+- **Node.js >= 18.x**
+- **MongoDB** (local o en la nube)
+- Paquetes incluidos en `package.json`:
+  - `@nestjs/common`
+  - `@nestjs/core`
+  - `@nestjs/platform-express`
+  - `mongodb`
+  - `jsonwebtoken`
+  - `bcryptjs`
+  - `cookie-parser`
+  - `class-validator`
+  - `class-transformer`
+  - `dotenv`
+  - `@getbrevo/brevo`
+  - `rxjs`
+---
+
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
